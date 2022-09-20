@@ -6,7 +6,26 @@ BLEService weatherService("180F");
 BLEStringCharacteristic weatherChar("2A19", BLERead | BLENotify, 30);
 String oldSensorLevel = "0";  // last sensor readings
 long previousMillis = 0;  // last time the sensor level was read, in ms
+float temp = 6.5;
 
+void updateSensorLevel(int R) {
+  String sensorLevel = String(R);
+  Serial.print("Sensor Level % is now: "); // print sensor readings
+  Serial.println(sensorLevel);
+  weatherChar.writeValue(sensorLevel);  // and update the weather level characteristic
+}
+
+// Get the temperature value. 
+float get_temperature() {
+  Serial.print("Begin method get_temperature()...");
+  //float temperature = HTS.readTemperature(); //doesn't work
+  temp = temp + 0.5;
+
+  Serial.print("Temperature = ");
+  Serial.print(temp);
+  Serial.println(" °C. Leaving get_temperatur().");
+  return temp;
+}
 
 void setup() {
   Serial.begin(9600);
@@ -21,7 +40,9 @@ void setup() {
   weatherService.addCharacteristic(weatherChar); // add the battery level characteristic
   BLE.addService(weatherService); // Add the battery service
   weatherChar.writeValue(oldSensorLevel); // set initial value for this characteristic
-
+  Serial.print("Old Temp was set to ");
+  Serial.print(oldSensorLevel);
+  Serial.println("°C.");
   BLE.advertise();
   Serial.println("Bluetooth® Perepherial Arduino Device active, waiting for connections...");
 }
@@ -40,32 +61,21 @@ void loop() {
     // check the sensor every 500ms while the central is connected:
     while (central.connected()) {
       long currentMillis = millis();
-
+      
       if (currentMillis - previousMillis >= 500) {
         previousMillis = currentMillis;
-
+	      Serial.print("Trying to get Temp Value... ");
         R = (int)get_temperature();
-        
+        Serial.print("Temp was found at ");
+        Serial.print(R);
+        Serial.println ("° C");
         updateSensorLevel(R);
         Serial.println("");
       }
     }
   }
-}
-
-void updateSensorLevel(int R) {
-  String sensorLevel = String(R);
-  Serial.print("Sensor Level % is now: "); // print sensor readings
-  Serial.println(sensorLevel);
-  weatherChar.writeValue(sensorLevel);  // and update the weather level characteristic
-}
-
-// Get the temperature value. 
-float get_temperature() {
-  float temperature = HTS.readTemperature();
-
-  Serial.print("Temperature = ");
-  Serial.print(temperature);
-  Serial.println(" °C");
-  return temperature;
+  else {
+    Serial.println("Disconnected from central");
+    delay(5000);
+  }
 }
