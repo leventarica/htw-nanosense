@@ -1,8 +1,8 @@
-##Zu den 02xyz.ino Dateien
-Diese Datei basieren auf dem Code von Anjali Pankan, im Github unter 
-https://github.com/AnjaliPankan/Embedded-System-Weather-Station-using-Arduino-Nano-33-BLE-Sense-and-ESP32 zu finden.
-Sie wurden von mir auf die wesentlichen BLE-Komponenten reduziert, um das Verfahren des BLE-Pairings nachvollziehen zu können.
-Mit diesem Code kann zwar noch kein Sensorwert ausgetauscht werden, aber er ermöglicht ein erstes BLE-pairing.
+## About the _.ino files
+author: Frank Kraesske
 
-jfk
+Both ino-files were created by  Anjali Pankan (https://github.com/AnjaliPankan/Embedded-System-Weather-Station-using-Arduino-Nano-33-BLE-Sense-and-ESP32) and reduced to BLE-essentials to both work as BLE-Devices for poc. 
+
+This code is not  minimal and surly can be further reduced to a bare BLE-minimum.
+In this prototyp the HTS221 Temp value is read on the Nano Sense and forwarded to the ESP 32 using BLE.
 
